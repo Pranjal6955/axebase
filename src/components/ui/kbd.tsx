@@ -1,5 +1,12 @@
 import { cn } from "@/lib/utils";
 
+/**
+ * Renders a styled <kbd> element representing a keyboard key.
+ *
+ * @param className - Additional CSS classes to merge with the component's base styles.
+ * @param props - Remaining props are forwarded to the underlying <kbd> element.
+ * @returns The <kbd> element with standardized visual styling and merged classes.
+ */
 function Kbd({ className, ...props }: React.ComponentProps<"kbd">) {
   return (
     <kbd
@@ -15,6 +22,13 @@ function Kbd({ className, ...props }: React.ComponentProps<"kbd">) {
   );
 }
 
+/**
+ * Renders a wrapper for keyboard key elements that applies horizontal spacing.
+ *
+ * @param className - Additional CSS classes to merge with the component's base classes.
+ * @param props - Remaining props are spread onto the rendered `<kbd>` element.
+ * @returns A `<kbd>` element that groups keyboard keys with an inline-flex layout and a small gap between items.
+ */
 function KbdGroup({ className, ...props }: React.ComponentProps<"div">) {
   return (
     <kbd

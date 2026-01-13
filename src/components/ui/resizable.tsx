@@ -6,6 +6,15 @@ import { Panel, PanelGroup, PanelResizeHandle } from "react-resizable-panels";
 
 import { cn } from "@/lib/utils";
 
+/**
+ * Render a PanelGroup preconfigured for the resizable panel layout.
+ *
+ * Renders a PanelGroup with a data-slot of "resizable-panel-group", default layout classes for full-size flexible panels (supports vertical direction), merges any supplied `className`, and forwards all other PanelGroup props.
+ *
+ * @param className - Additional class names to append to the default container classes
+ * @param props - Remaining props are passed through to the underlying PanelGroup
+ * @returns The configured PanelGroup element for use in a resizable panel layout
+ */
 function ResizablePanelGroup({
   className,
   ...props
@@ -22,10 +31,22 @@ function ResizablePanelGroup({
   );
 }
 
+/**
+ * Renders a Panel with a data-slot of "resizable-panel" and forwards all received props.
+ *
+ * @param props - Props forwarded to the underlying Panel component.
+ * @returns The Panel element with `data-slot="resizable-panel"` and the forwarded props.
+ */
 function ResizablePanel({ ...props }: React.ComponentProps<typeof Panel>) {
   return <Panel data-slot="resizable-panel" {...props} />;
 }
 
+/**
+ * Renders a styled resize handle for a resizable panel group, optionally showing a visible grip icon.
+ *
+ * @param withHandle - When `true`, displays a centered grip icon inside the handle.
+ * @returns A PanelResizeHandle element with layout-specific styling and an optional visible grip. 
+ */
 function ResizableHandle({
   withHandle,
   className,

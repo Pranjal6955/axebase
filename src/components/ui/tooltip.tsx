@@ -5,6 +5,13 @@ import * as TooltipPrimitive from "@radix-ui/react-tooltip";
 
 import { cn } from "@/lib/utils";
 
+/**
+ * Provides a tooltip context configured with a delay and forwarded provider props.
+ *
+ * @param delayDuration - Milliseconds to wait before showing the tooltip; defaults to 0.
+ * @param props - Additional props forwarded to the underlying TooltipPrimitive.Provider.
+ * @returns A TooltipPrimitive.Provider element configured with the given delay and props.
+ */
 function TooltipProvider({
   delayDuration = 0,
   ...props
@@ -18,6 +25,12 @@ function TooltipProvider({
   );
 }
 
+/**
+ * Render a tooltip root component that supplies provider context and forwards props to the underlying Radix root.
+ *
+ * @param props - Props forwarded to `TooltipPrimitive.Root`
+ * @returns A tooltip root element connected to the tooltip provider with the given props applied
+ */
 function Tooltip({
   ...props
 }: React.ComponentProps<typeof TooltipPrimitive.Root>) {
@@ -28,12 +41,26 @@ function Tooltip({
   );
 }
 
+/**
+ * Renders a tooltip trigger element and forwards all props to the underlying Radix Trigger.
+ *
+ * @param props - Props passed through to TooltipPrimitive.Trigger; any valid Trigger props are accepted and applied.
+ * @returns A TooltipPrimitive.Trigger element with `data-slot="tooltip-trigger"` and the provided props.
+ */
 function TooltipTrigger({
   ...props
 }: React.ComponentProps<typeof TooltipPrimitive.Trigger>) {
   return <TooltipPrimitive.Trigger data-slot="tooltip-trigger" {...props} />;
 }
 
+/**
+ * Renders the styled tooltip content and arrow inside a portal.
+ *
+ * @param className - Additional CSS classes appended to the component's default styling.
+ * @param sideOffset - Distance in pixels to offset the content from the trigger; defaults to 0.
+ * @param children - Content displayed inside the tooltip.
+ * @returns The rendered tooltip content element with an embedded arrow.
+ */
 function TooltipContent({
   className,
   sideOffset = 0,

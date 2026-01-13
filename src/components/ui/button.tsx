@@ -36,6 +36,15 @@ const buttonVariants = cva(
   },
 );
 
+/**
+ * Render a styled button that applies variant and size classes and can render as a Slot for composition.
+ *
+ * @param className - Additional class names to merge with the computed button classes
+ * @param variant - Visual style to apply; one of `"default"`, `"destructive"`, `"outline"`, `"secondary"`, `"ghost"`, or `"link"`
+ * @param size - Size key to apply; one of `"default"`, `"sm"`, `"lg"`, `"icon"`, `"icon-sm"`, or `"icon-lg"`
+ * @param asChild - If `true`, render a `Slot` instead of a native `button` to allow composing the button with a child component
+ * @returns A JSX element (a `button` or `Slot`) with data attributes for variant/size, computed className, and all forwarded props
+ */
 function Button({
   className,
   variant = "default",

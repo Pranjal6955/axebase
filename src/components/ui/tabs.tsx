@@ -5,6 +5,13 @@ import * as TabsPrimitive from "@radix-ui/react-tabs";
 
 import { cn } from "@/lib/utils";
 
+/**
+ * Render the root Tabs container with default vertical layout and gap.
+ *
+ * @param className - Additional CSS class names appended to the default container classes
+ * @param props - Remaining props are forwarded to the underlying `TabsPrimitive.Root`
+ * @returns The `TabsPrimitive.Root` element with default layout classes and forwarded props
+ */
 function Tabs({
   className,
   ...props
@@ -18,6 +25,12 @@ function Tabs({
   );
 }
 
+/**
+ * Wraps Radix TabsPrimitive.List with the library's default styling for a horizontal tabs list.
+ *
+ * @param className - Additional class names appended to the component's default styling
+ * @returns The rendered tabs list element
+ */
 function TabsList({
   className,
   ...props
@@ -34,6 +47,15 @@ function TabsList({
   );
 }
 
+/**
+ * Renders a styled tab trigger for Radix Tabs with predefined classes and forwarded props.
+ *
+ * The rendered element includes a `data-slot="tabs-trigger"` attribute, merges the provided
+ * `className` with the component's default utility classes, and forwards all other props to
+ * `TabsPrimitive.Trigger`.
+ *
+ * @returns A React element representing the tab trigger with merged `className` and forwarded props.
+ */
 function TabsTrigger({
   className,
   ...props
@@ -50,6 +72,11 @@ function TabsTrigger({
   );
 }
 
+/**
+ * Tab panel wrapper that applies default layout styles and exposes Radix TabsPrimitive.Content props.
+ *
+ * @returns A React element for a tab panel with the default `flex-1 outline-none` styling and any provided `className` and props applied.
+ */
 function TabsContent({
   className,
   ...props

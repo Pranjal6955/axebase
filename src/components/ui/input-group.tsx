@@ -8,6 +8,13 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 
+/**
+ * Renders a container for composing inputs with addons, buttons, text, and controls.
+ *
+ * The container applies layout and alignment-based styling, focus and error visuals, and forwards native div props.
+ *
+ * @returns The div element that serves as the input group container.
+ */
 function InputGroup({ className, ...props }: React.ComponentProps<"div">) {
   return (
     <div
@@ -57,6 +64,15 @@ const inputGroupAddonVariants = cva(
   },
 );
 
+/**
+ * Renders an input-group addon container positioned relative to the input group.
+ *
+ * The addon accepts alignment variants ("inline-start", "inline-end", "block-start", "block-end") and, when clicked, focuses the first input inside the same group unless the click originated from a nested button.
+ *
+ * @param align - Alignment of the addon within the group; defaults to "inline-start".
+ * @param className - Additional CSS classes to apply to the addon container.
+ * @returns The rendered addon element.
+ */
 function InputGroupAddon({
   className,
   align = "inline-start",
@@ -97,6 +113,15 @@ const inputGroupButtonVariants = cva(
   },
 );
 
+/**
+ * Render a Button preconfigured for placement inside an InputGroup.
+ *
+ * @param className - Additional CSS classes to merge with the addon button styles
+ * @param type - HTML button type attribute (defaults to `"button"`)
+ * @param variant - Visual variant passed to the underlying Button (defaults to `"ghost"`)
+ * @param size - Size variant applied to the addon button styles (defaults to `"xs"`)
+ * @returns A Button element sized and styled for use as an input group button
+ */
 function InputGroupButton({
   className,
   type = "button",
@@ -116,6 +141,13 @@ function InputGroupButton({
   );
 }
 
+/**
+ * Renders a styled inline text container for input group addons.
+ *
+ * The element applies muted foreground, small text size, horizontal spacing, and ensures contained SVGs do not receive pointer events and default to size-4 unless they include an explicit size class.
+ *
+ * @returns The rendered `span` element with applied styles and forwarded props.
+ */
 function InputGroupText({ className, ...props }: React.ComponentProps<"span">) {
   return (
     <span
@@ -128,6 +160,11 @@ function InputGroupText({ className, ...props }: React.ComponentProps<"span">) {
   );
 }
 
+/**
+ * Renders an Input configured to act as the control within an InputGroup.
+ *
+ * @returns The Input element with input-group control attributes and styling.
+ */
 function InputGroupInput({
   className,
   ...props
@@ -144,6 +181,12 @@ function InputGroupInput({
   );
 }
 
+/**
+ * Textarea styled for use as an input group control.
+ *
+ * @param className - Additional CSS classes merged with the component's default styles.
+ * @returns The rendered Textarea element with input-group control attributes and styling.
+ */
 function InputGroupTextarea({
   className,
   ...props

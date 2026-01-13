@@ -5,6 +5,13 @@ import * as LabelPrimitive from "@radix-ui/react-label";
 
 import { cn } from "@/lib/utils";
 
+/**
+ * Renders a form label element with preset layout, typography, and disabled/interactivity styles, forwarding all props to the underlying Radix Label root.
+ *
+ * @param className - Additional CSS class names to merge with the component's default classes
+ * @param props - Remaining props are passed through to the underlying LabelPrimitive.Root
+ * @returns The label element with default classes combined with `className`
+ */
 function Label({
   className,
   ...props
