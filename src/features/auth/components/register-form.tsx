@@ -28,7 +28,7 @@ import { authClient } from "@/lib/auth-client";
 
 const registerSchema = z
   .object({
-    fullname: z.string("Please Enter your full name"),
+    fullname: z.string().min(1,"Please enter your full name"),
     email: z.email("Please Enter a valid email address"),
     password: z.string().min(8, "Password must be atleast 8 characters"),
     confirmpassword: z.string(),
