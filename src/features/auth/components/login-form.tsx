@@ -46,18 +46,21 @@ export function LoginForm() {
   });
 
   const onSubmit = async (values: LoginFormValues) => {
-    await authClient.signIn.email({
-      email: values.email,
-      password: values.password,
-      callbackURL: "/"
-    },{
-      onSuccess: () => {
-        router.push("/")
+    await authClient.signIn.email(
+      {
+        email: values.email,
+        password: values.password,
+        callbackURL: "/",
       },
-      onError: (ctx) => {
-        toast.error(ctx.error.message)
-      }
-    })
+      {
+        onSuccess: () => {
+          router.push("/");
+        },
+        onError: (ctx: any) => {
+          toast.error(ctx.error.message);
+        },
+      },
+    );
   };
   const isPending = form.formState.isSubmitting;
 
@@ -130,7 +133,7 @@ export function LoginForm() {
                   </Button>
                 </div>
                 <div className="text-center text-sm">
-                  Don't have an account?{""}
+                  Don't have an account?{" "}
                   <Link
                     href="/register"
                     className="underline underline-offset-4"

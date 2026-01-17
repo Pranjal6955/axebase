@@ -31,12 +31,12 @@ import { authClient } from "@/lib/auth-client";
 const registerSchema = z
   .object({
     email: z.email("Please Enter a valid email address"),
-    password: z.string().min(1, "Password is Required"),
+    password: z.string().min(8, "Password must be atleast 8 characters"),
     confirmpassword: z.string(),
   })
   .refine((data) => data.password === data.confirmpassword, {
-    message: "Password don't match",
-    path: ["confirmpassword", "password"],
+    message: "Passwords don't match",
+    path: ["confirmpassword"],
   });
 
 type RegisterFormValues = z.infer<typeof registerSchema>;
@@ -55,20 +55,20 @@ export function RegisterForm() {
 
   const onSubmit = async (values: RegisterFormValues) => {
     await authClient.signUp.email(
-        {
-            name: values.email,
-            email: values.email,
-            password :values.password,
-            callbackURL: "/",
+      {
+        name: values.email,
+        email: values.email,
+        password: values.password,
+        callbackURL: "/",
+      },
+      {
+        onSuccess: () => {
+          router.push("/");
         },
-        {
-            onSuccess: ()=>{
-                router.push("/");
-            },
-            onError: (ctx) => {
-                toast.error(ctx.error.message)
-            }
-        }
+        onError: (ctx: any) => {
+          toast.error(ctx.error.message);
+        },
+      },
     );
   };
   const isPending = form.formState.isSubmitting;
@@ -78,7 +78,7 @@ export function RegisterForm() {
       <Card>
         <CardHeader className="text-center">
           <CardTitle>Get Started</CardTitle>
-          <CardDescription>Create your account to started</CardDescription>
+          <CardDescription>Create your account to get started</CardDescription>
         </CardHeader>
         <CardContent>
           <Form {...form}>
@@ -159,7 +159,7 @@ export function RegisterForm() {
                   </Button>
                 </div>
                 <div className="text-center text-sm">
-                  Already have an account{""}
+                  Already have an account{" "}
                   <Link href="/login" className="underline underline-offset-4">
                     Login
                   </Link>
