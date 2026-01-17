@@ -12,6 +12,13 @@ const Page = () => {
   const trpc = useTRPC();
   const queryClient = useQueryClient();
   const { data } = useQuery(trpc.getWorkflows.queryOptions());
+  const testAi = useMutation(
+    trpc.testAi.mutationOptions({
+      onSuccess: () => {
+        toast.success("AI Job Queued");
+      },
+    }),
+  );
   const create = useMutation(
     trpc.createWorkflow.mutationOptions({
       onSuccess: () => {
@@ -23,6 +30,9 @@ const Page = () => {
     <div className="min-h-screen min-w-screen flex items-center justify-center flex-col gap-y-6">
       Hello Welcome to AxeBase
       <div>{JSON.stringify(data)}</div>
+      <Button disabled={testAi.isPending} onClick={() => testAi.mutate()}>
+        Test AI
+      </Button>
       <Button onClick={() => create.mutate()} disabled={create.isPending}>
         Create Workflow
       </Button>
