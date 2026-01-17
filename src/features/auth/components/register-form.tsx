@@ -24,12 +24,11 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-
-import { cn } from "@/lib/utils";
 import { authClient } from "@/lib/auth-client";
 
 const registerSchema = z
   .object({
+    fullname: z.string("Please Enter your full name"),
     email: z.email("Please Enter a valid email address"),
     password: z.string().min(8, "Password must be atleast 8 characters"),
     confirmpassword: z.string(),
@@ -47,6 +46,7 @@ export function RegisterForm() {
   const form = useForm<RegisterFormValues>({
     resolver: zodResolver(registerSchema),
     defaultValues: {
+      fullname: "",
       email: "",
       password: "",
       confirmpassword: "",
@@ -56,7 +56,7 @@ export function RegisterForm() {
   const onSubmit = async (values: RegisterFormValues) => {
     await authClient.signUp.email(
       {
-        name: values.email,
+        name: values.fullname,
         email: values.email,
         password: values.password,
         callbackURL: "/",
@@ -103,6 +103,19 @@ export function RegisterForm() {
                   </Button>
                 </div>
                 <div className="grid gap-6">
+                  <FormField
+                    control={form.control}
+                    name="fullname"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Full name</FormLabel>
+                        <FormControl>
+                          <Input type="text" placeholder="dev roy" {...field} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
                   <FormField
                     control={form.control}
                     name="email"
