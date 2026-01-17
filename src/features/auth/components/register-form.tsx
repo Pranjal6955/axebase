@@ -28,7 +28,7 @@ import { authClient } from "@/lib/auth-client";
 
 const registerSchema = z
   .object({
-    fullname: z.string().min(1,"Please enter your full name"),
+    fullname: z.string().min(1, "Please enter your full name"),
     email: z.email("Please Enter a valid email address"),
     password: z.string().min(8, "Password must be at least 8 characters"),
     confirmpassword: z.string(),
@@ -91,6 +91,12 @@ export function RegisterForm() {
                     type="button"
                     disabled={isPending}
                   >
+                    <Image
+                      alt="Github"
+                      src="/logos/github.svg"
+                      width={20}
+                      height={20}
+                    />
                     Continue With Github
                   </Button>
                   <Button
@@ -99,6 +105,12 @@ export function RegisterForm() {
                     type="button"
                     disabled={isPending}
                   >
+                    <Image
+                      alt="Google"
+                      src="/logos/google.svg"
+                      width={20}
+                      height={20}
+                    />
                     Continue With Google
                   </Button>
                 </div>
