@@ -23,8 +23,7 @@ import {
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
 import { authClient } from "@/lib/auth-client";
-import { title } from "process";
-import { group } from "console";
+import { authClient } from "@/lib/auth-client";
 
 const menuItems = [
   {
