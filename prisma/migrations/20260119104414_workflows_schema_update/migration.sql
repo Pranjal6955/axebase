@@ -7,7 +7,7 @@
 */
 -- AlterTable
 ALTER TABLE "Workflow" ADD COLUMN     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-ADD COLUMN     "updateAt" TIMESTAMP(3) NOT NULL,
+ADD COLUMN     "updatedAt" TIMESTAMP(3) NOT NULL,
 ADD COLUMN     "userId" TEXT NOT NULL;
 
 -- AddForeignKey
