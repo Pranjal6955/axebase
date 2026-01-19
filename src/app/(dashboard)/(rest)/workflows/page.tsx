@@ -7,7 +7,7 @@ import { ErrorBoundary} from "react-error-boundary"
 
 const Page = async () => {
   await requireAuth();
-  prefetchWorflows()
+  await prefetchWorflows({});
 
 
   return (
