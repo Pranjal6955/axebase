@@ -34,8 +34,14 @@ export const UpgradeModal = ({
                 <AlertDialogFooter>
                     <AlertDialogCancel>Cancel</AlertDialogCancel>
                     <AlertDialogAction
-                    onClick={()=>  authClient.checkout({slug:"pro"})}
-                    
+                      onClick={async () => {
+                        try {
+                          await authClient.checkout({ slug: "pro" });
+                        } catch (error) {
+                          console.error("Checkout failed:", error);
+                          // Consider showing a toast notification
+                        }
+                      }}
                     >
                         Upgrade Now
                     </AlertDialogAction>
