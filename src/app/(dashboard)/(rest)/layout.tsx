@@ -1,16 +1,11 @@
 import { AppHeader } from "@/components/app-header";
-import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
 
 const Layout = ({ children }: { children: React.ReactNode }) => {
   return (
     <>
-    <AppHeader />
-    <main className = "flex-1">
-        {children}
-    </main>
-    
+      <AppHeader />
+      <main className="flex-1">{children}</main>
     </>
-
   );
 };
 
