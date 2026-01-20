@@ -1,4 +1,8 @@
-import { createTRPCRouter, premiumProcedure, protectedProcedure } from "@/trpc/init";
+import {
+  createTRPCRouter,
+  premiumProcedure,
+  protectedProcedure,
+} from "@/trpc/init";
 import prisma from "@/lib/db";
 import { generateSlug } from "random-word-slugs";
 import { z } from "zod";

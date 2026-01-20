@@ -1,11 +1,14 @@
 "use client";
 
 import { boolean } from "zod";
-import { useCreateWorflow, useSuspenseWorkflows } from "../hooks/use-workflows";
+import {
+  useCreateWorkflow,
+  useSuspenseWorkflows,
+} from "../hooks/use-workflows";
 import { EntityHeader, EntityContainer } from "@/components/entity-components";
 import { Children } from "react";
 import { err } from "inngest/types";
-import { useUpgradeModel } from "@/hooks/use-upgrade-modal";
+import { useUpgradeModal } from "@/hooks/use-upgrade-modal";
 import { useRouter } from "next/navigation";
 
 export const WorkflowLists = () => {
@@ -15,20 +18,20 @@ export const WorkflowLists = () => {
 };
 
 export const WorkflowsHeader = ({ disabled }: { disabled?: boolean }) => {
-    const createWorkflow = useCreateWorflow();
-    const {handelError, model} = useUpgradeModel()
-    const router = useRouter()
+  const createWorkflow = useCreateWorkflow();
+  const { handleError, model } = useUpgradeModal();
+  const router = useRouter();
 
-    const handleCreate = () => {
-        createWorkflow.mutate(undefined, {
-          onSuccess: (data) => {
-            router.push(`/workflows/${data.id}`)
-          },
-            onError: (error) => {
-                handelError(error)
-            }
-        })
-    }
+  const handleCreate = () => {
+    createWorkflow.mutate(undefined, {
+      onSuccess: (data) => {
+        router.push(`/workflows/${data.id}`);
+      },
+      onError: (error) => {
+        handleError(error);
+      },
+    });
+  };
 
   return (
     <>
