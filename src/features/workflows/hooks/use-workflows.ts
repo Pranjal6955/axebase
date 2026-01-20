@@ -12,7 +12,7 @@ export const useSuspenseWorkflows = () => {
 /**
  * Hook to Create a new Worflow
  * */
-export const useCreateWorflow = () => {
+export const useCreateWorkflow = () => {
 
     const queryClient = useQueryClient();
     const trpc = useTRPC();
