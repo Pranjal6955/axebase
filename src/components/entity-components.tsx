@@ -25,7 +25,7 @@ export const EntityHeader = ({
   isCreating,
 }: EntityHeaderProps) => {
   return (
-    <div className="flex felx-row items-center justify-between gap-x-4">
+    <div className="flex flex-row items-center justify-between gap-x-4">
       <div className="flex flex-col">
         <h1 className="text-lg md:text-xl font-semibold">{title}</h1>
         {description && (
