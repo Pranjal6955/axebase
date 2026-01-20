@@ -19,7 +19,7 @@ export const useCreateWorflow = () => {
 
     return useMutation(trpc.workflows.create.mutationOptions({
         onSuccess: (data) => {
-            toast.success(`Workflows "${data.name}" created`);
+            toast.success(`Workflow "${data.name}" created`);
             queryClient.invalidateQueries(
                 trpc.workflows.getMany.queryOptions(),
             )
