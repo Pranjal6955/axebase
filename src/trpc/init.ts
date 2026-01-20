@@ -59,8 +59,8 @@ export const premiumProcedure = protectedProcedure.use(
         throw error;
       }
       throw new TRPCError({
-        code: "FORBIDDEN",
-        message: "Active Subscription required",
+        code: "INTERNAL_SERVER_ERROR",
+        message: "Unable to verify subscription status",
       });
     }
   },
