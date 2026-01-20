@@ -68,7 +68,7 @@ export const workflowsRouter = createTRPCRouter({
             },
           },
           orderBy: {
-            updatedAt: "desc",
+            updateAt: "desc",
           },
         }),
         prisma.workflow.count({
