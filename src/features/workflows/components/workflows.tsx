@@ -34,8 +34,8 @@ export const WorkflowsHeader = ({ disabled }: { disabled?: boolean }) => {
     <>
       {model}
       <EntityHeader
-        title="WorkFlows"
-        description="Create and manage your worflows"
+        title="Workflows"
+        description="Create and manage your workflows"
         onNew={handleCreate}
         newButtonLabel="New Workflow"
         disabled={disabled}
