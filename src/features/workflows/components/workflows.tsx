@@ -9,6 +9,7 @@ import { EntityHeader, EntityContainer } from "@/components/entity-components";
 import { Children } from "react";
 import { err } from "inngest/types";
 import { useUpgradeModal } from "@/hooks/use-upgrade-modal";
+import { UpgradeModal } from "@/components/upgrade-modal";
 import { useRouter } from "next/navigation";
 
 export const WorkflowLists = () => {
@@ -19,7 +20,7 @@ export const WorkflowLists = () => {
 
 export const WorkflowsHeader = ({ disabled }: { disabled?: boolean }) => {
   const createWorkflow = useCreateWorkflow();
-  const { handleError, model } = useUpgradeModal();
+  const { handleError, open, setOpen } = useUpgradeModal();
   const router = useRouter();
 
   const handleCreate = () => {
@@ -35,7 +36,7 @@ export const WorkflowsHeader = ({ disabled }: { disabled?: boolean }) => {
 
   return (
     <>
-      {model}
+      <UpgradeModal open={open} onOpenChange={setOpen} />
       <EntityHeader
         title="Workflows"
         description="Create and manage your workflows"
