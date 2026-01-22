@@ -37,7 +37,6 @@ export const UpgradeModal = ({ open, onOpenChange }: UpgradeModalProps) => {
                 await authClient.checkout({ slug: "pro" });
               } catch (error) {
                 console.error("Checkout failed:", error);
-                // Consider showing a toast notification
               }
             }}
           >
