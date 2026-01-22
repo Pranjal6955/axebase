@@ -327,6 +327,7 @@ export const EntityItem = ({
                   >
                     <DropdownMenuItem onClick={handleRemove}>
                       <TrashIcon className="size-4" />
+                      Delete
                     </DropdownMenuItem>
                   </DropdownMenuContent>
                 </DropdownMenu>
