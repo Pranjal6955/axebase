@@ -52,6 +52,9 @@ export const useRemoveWorkflow = () => {
           trpc.workflows.getOne.queryFilter({ id: data.id }),
         );
       },
+      onError: (error) => {
+        toast.error(`Failed to remove Workflow: ${error.message}`);
+      },
     }),
   );
 };

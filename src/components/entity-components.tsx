@@ -282,7 +282,7 @@ export const EntityItem = ({
       return;
     }
     if (onRemove) {
-      await onRemove;
+      await onRemove();
     }
   };
 
@@ -323,7 +323,7 @@ export const EntityItem = ({
                   </DropdownMenuTrigger>
                   <DropdownMenuContent
                     align="end"
-                    onClick={(e) => e.stopPropagation}
+                    onClick={(e) => e.stopPropagation()}
                   >
                     <DropdownMenuItem onClick={handleRemove}>
                       <TrashIcon className="size-4" />
