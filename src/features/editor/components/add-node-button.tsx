@@ -8,6 +8,7 @@ export const AddNodeButton = memo(() => {
   return (
     <Button
       onClick={() => {}}
+      aria-label="Add node"
       size="icon"
       variant="outline"
       className="bg-background"
