@@ -105,7 +105,7 @@ model Node {
   name String
   type NodeType
   position Json
-  data Json @default("{}")
+  data Json?
 
   outputConnections Connection[] @relation("FromNode")
   inputConnections Connection[] @relation("ToNode")
