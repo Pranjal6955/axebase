@@ -26,12 +26,16 @@ export function WorkflowNode({
     <>
       {showToolbar && (
         <NodeToolbar>
-          <Button size="sm" variant="ghost" onClick={onSetting}>
-            <SettingsIcon className="size-4" />
-          </Button>
-          <Button size="sm" variant="ghost" onClick={onDelete}>
-            <TrashIcon className="size-4" />
-          </Button>
+          {onSetting && (
+            <Button size="sm" variant="ghost" onClick={onSetting} aria-label="Settings">
+              <SettingsIcon className="size-4" />
+            </Button>
+          )}
+          {onDelete && (
+            <Button size="sm" variant="ghost" onClick={onDelete} aria-label="Delete">
+              <TrashIcon className="size-4" />
+            </Button>
+          )}
         </NodeToolbar>
       )}
       {children}
