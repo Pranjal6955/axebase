@@ -56,55 +56,53 @@ export function NodeSelector({
   onOpenChange,
   children,
 }: NodeSelectorProps) {
-    const { setNodes, getNodes, screenToFlowPosition} = useReactFlow();
-    const handleNodeSelect = useCallback((selection: NodeTypeOption) => {
-        // Check if trying to add a manual trigger when one already exists
-        if (selection.type === NodeType.MANUAL_TRIGGER){
-            const nodes = getNodes();
-            const hasManualTrigger = nodes.some(
-                (node) => node.type === NodeType.MANUAL_TRIGGER
-            );
+  const { setNodes, getNodes, screenToFlowPosition } = useReactFlow();
+  const handleNodeSelect = useCallback(
+    (selection: NodeTypeOption) => {
+      // Check if trying to add a manual trigger when one already exists
+      if (selection.type === NodeType.MANUAL_TRIGGER) {
+        const nodes = getNodes();
+        const hasManualTrigger = nodes.some(
+          (node) => node.type === NodeType.MANUAL_TRIGGER,
+        );
 
-            if (hasManualTrigger) {
-                toast.error("Only one manual trigger is allowed per workflow")
-                return;
-            }
+        if (hasManualTrigger) {
+          toast.error("Only one manual trigger is allowed per workflow");
+          return;
         }
+      }
 
-        setNodes((nodes) => {
-            const hasInitialTrigger = nodes.some(
-                (node) => node.type === NodeType.INITIAL,
-            );
+      setNodes((nodes) => {
+        const hasInitialTrigger = nodes.some(
+          (node) => node.type === NodeType.INITIAL,
+        );
 
-            const centerX = window.innerWidth/2;
-            const centerY = window.innerHeight/2;
+        const centerX = window.innerWidth / 2;
+        const centerY = window.innerHeight / 2;
 
-            const flowPosition = screenToFlowPosition({
-                x: centerX + (Math.random() - 0.5) * 200,
-                y: centerY + (Math.random() - 0.5) * 200,
-            });
-
-            const newNode = {
-                id: createId(),
-                data: {},
-                position: flowPosition,
-                type: selection.type,
-            };
-
-            if (hasInitialTrigger) {
-                return [newNode];
-            }
-
-            return [...nodes, newNode]
+        const flowPosition = screenToFlowPosition({
+          x: centerX + (Math.random() - 0.5) * 200,
+          y: centerY + (Math.random() - 0.5) * 200,
         });
 
-        onOpenChange(false);
-    }, [
-        setNodes,
-        getNodes,
-        onOpenChange,
-        screenToFlowPosition,
-    ]);
+        const newNode = {
+          id: createId(),
+          data: {},
+          position: flowPosition,
+          type: selection.type,
+        };
+
+        if (hasInitialTrigger) {
+          return [newNode];
+        }
+
+        return [...nodes, newNode];
+      });
+
+      onOpenChange(false);
+    },
+    [setNodes, getNodes, onOpenChange, screenToFlowPosition],
+  );
   return (
     <Sheet open={open} onOpenChange={onOpenChange}>
       <SheetTrigger asChild>{children}</SheetTrigger>
