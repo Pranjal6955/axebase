@@ -60,10 +60,9 @@ export const Editor = ({ workflowId }: { workflowId: string }) => {
     [],
   );
 
-  const hasManualTrigger = useMemo( () => {
-    return nodes.some((node) => node.type === NodeType.MANUAL_TRIGGER)
-
-  },[nodes])
+  const hasManualTrigger = useMemo(() => {
+    return nodes.some((node) => node.type === NodeType.MANUAL_TRIGGER);
+  }, [nodes]);
 
   return (
     <div className="size-full">
@@ -92,9 +91,9 @@ export const Editor = ({ workflowId }: { workflowId: string }) => {
           <AddNodeButton />
         </Panel>
         {hasManualTrigger && (
-        <Panel position="bottom-center">
-          <ExecuteWorkflowButton workflowId={workflowId} />
-        </Panel>
+          <Panel position="bottom-center">
+            <ExecuteWorkflowButton workflowId={workflowId} />
+          </Panel>
         )}
       </ReactFlow>
     </div>
