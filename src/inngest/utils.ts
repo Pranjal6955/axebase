@@ -34,7 +34,7 @@ export const topologicalSort = (
         // Remove duplicates (from self-edges)
         sortedNodeIds = [...new Set(sortedNodeIds)]
     } catch (error) {
-        if (error instanceof Error && error.message.includes("Cuclic")) {
+        if (error instanceof Error && error.message.includes("Cyclic")) {
             throw new Error("Workflow contains a cycle")
         }
         throw error;
