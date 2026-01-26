@@ -1,19 +1,19 @@
 import type { NodeExecutor } from "@/features/executions/types";
 import { NonRetriableError } from "inngest";
 import ky, { type Options as KyOptions } from "ky";
-import Handlebars from "handlebars"
+import Handlebars from "handlebars";
 
-Handlebars.registerHelper("json",(context) => {
+Handlebars.registerHelper("json", (context) => {
   const jsonString = JSON.stringify(context, null, 2);
   const safeString = new Handlebars.SafeString(jsonString);
 
   return safeString;
-})
+});
 
 type HttpTriggerData = {
   variableName: string;
   endpoint: string;
-  method?: "GET" | "POST" | "PUT" | "PATCH" | "DELETE";
+  method: "GET" | "POST" | "PUT" | "PATCH" | "DELETE";
   body?: string;
 };
 
@@ -35,12 +35,14 @@ export const httpRequestExecutor: NodeExecutor<HttpTriggerData> = async ({
   }
   if (!data.variableName) {
     //TODO : Publish "error" state for HTTP Request
-    throw new NonRetriableError("HTTP Request node: Variable name not configured");
+    throw new NonRetriableError(
+      "HTTP Request node: Variable name not configured",
+    );
   }
 
   const result = await step.run("http-request", async () => {
     const endpoint = Handlebars.compile(data.endpoint)(context);
-    const method = data.method || "GET";
+    const method = data.method;
 
     const options: KyOptions = {
       method,
@@ -50,7 +52,13 @@ export const httpRequestExecutor: NodeExecutor<HttpTriggerData> = async ({
 
     if (["POST", "PUT", "PATCH"].includes(method)) {
       const resolved = Handlebars.compile(data.body || "{}")(context);
-      JSON.parse(resolved)
+      try {
+        JSON.parse(resolved);
+      } catch {
+        throw new NonRetriableError(
+          "HTTP Request Node: Request body must be valid JSON",
+        );
+      }
       options.body = resolved;
       options.headers = {
         "Content-Type": "application/json",
@@ -70,11 +78,10 @@ export const httpRequestExecutor: NodeExecutor<HttpTriggerData> = async ({
       },
     };
 
-      return {
-        ...context,
-        [data.variableName]: responsePayload,
-      };
-    
+    return {
+      ...context,
+      [data.variableName]: responsePayload,
+    };
   });
 
   //TODO : Publish "Success" state for HTTP Request
