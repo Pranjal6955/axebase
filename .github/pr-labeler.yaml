@@ -1,4 +1,4 @@
-\# Configuration for actions/labeler
+# Configuration for actions/labeler
 # Labels PRs based on file paths that are modified
 
 # Frontend/UI related changes
