@@ -2,6 +2,7 @@ import type { NodeExecutor } from "@/features/executions/types";
 import { NonRetriableError } from "inngest";
 import ky, { type Options as KyOptions } from "ky";
 import Handlebars from "handlebars";
+import { httpRequestChannel } from "@/inngest/channels/http-request";
 
 Handlebars.registerHelper("json", (context) => {
   const jsonString = JSON.stringify(context, null, 2);
@@ -22,24 +23,44 @@ export const httpRequestExecutor: NodeExecutor<HttpTriggerData> = async ({
   nodeId,
   context,
   step,
+  publish,
 }) => {
-  //TODO : Publish "loading" state for HTTP Request
-
+  await publish(
+    httpRequestChannel().status({
+      nodeId,
+      status: "loading"
+    }),
+  )
   if (!data.endpoint) {
-    //TODO : Publish "error" state for HTTP Request
+    await publish(
+    httpRequestChannel().status({
+      nodeId,
+      status: "error"
+    }),
+  )
     throw new NonRetriableError("HTTP Request node: No endpoint configured");
   }
   if (!data.method) {
-    //TODO : Publish "error" state for HTTP Request
+    await publish(
+    httpRequestChannel().status({
+      nodeId,
+      status: "error"
+    }),
+  )
     throw new NonRetriableError("HTTP Request node: Method not configured");
   }
   if (!data.variableName) {
-    //TODO : Publish "error" state for HTTP Request
+    await publish(
+    httpRequestChannel().status({
+      nodeId,
+      status: "error"
+    }),
+  )
     throw new NonRetriableError(
       "HTTP Request node: Variable name not configured",
     );
   }
-
+try {
   const result = await step.run("http-request", async () => {
     const endpoint = Handlebars.compile(data.endpoint)(context);
     const method = data.method;
@@ -84,7 +105,22 @@ export const httpRequestExecutor: NodeExecutor<HttpTriggerData> = async ({
     };
   });
 
-  //TODO : Publish "Success" state for HTTP Request
+  await publish(
+    httpRequestChannel().status({
+      nodeId,
+      status: "success"
+    }),
+  )
 
   return result;
+} catch (error) {
+  await publish(
+    httpRequestChannel().status({
+      nodeId,
+      status: "error"
+    }),
+  )
+  throw error;
+
+}
 };
