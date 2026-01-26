@@ -1,0 +1,105 @@
+\# Configuration for actions/labeler
+# Labels PRs based on file paths that are modified
+
+# Frontend/UI related changes
+'frontend':
+  - changed-files:
+    - any-glob-to-any-file: 
+      - 'src/components/**/*'
+      - 'src/app/**/*.tsx'
+      - 'src/app/**/*.jsx'
+      - 'public/**/*'
+
+# Styling changes
+'css/styling':
+  - changed-files:
+    - any-glob-to-any-file:
+      - '**/*.css'
+      - '**/*.scss'
+      - '**/*.sass'
+      - 'tailwind.config.*'
+      - 'postcss.config.*'
+
+# Backend/API changes
+'backend':
+  - changed-files:
+    - any-glob-to-any-file:
+      - 'src/server/**/*'
+      - 'src/api/**/*'
+      - 'src/app/api/**/*'
+
+# Database related changes
+'database':
+  - changed-files:
+    - any-glob-to-any-file:
+      - 'prisma/**/*'
+      - '**/migrations/**/*'
+      - 'prisma.config.*'
+
+# Configuration changes
+'configuration':
+  - changed-files:
+    - any-glob-to-any-file:
+      - '*.config.*'
+      - '*.json'
+      - '.env*'
+      - 'biome.json'
+      - 'tsconfig.json'
+
+# Documentation changes
+'documentation':
+  - changed-files:
+    - any-glob-to-any-file:
+      - '**/*.md'
+      - 'docs/**/*'
+      - 'README*'
+
+# Testing changes
+'testing':
+  - changed-files:
+    - any-glob-to-any-file:
+      - '**/*.test.*'
+      - '**/*.spec.*'
+      - '**/__tests__/**/*'
+      - 'tests/**/*'
+      - 'e2e/**/*'
+
+# CI/CD changes
+'ci/cd':
+  - changed-files:
+    - any-glob-to-any-file:
+      - '.github/**/*'
+      - '.github/workflows/**/*'
+
+# Dependencies
+'dependencies':
+  - changed-files:
+    - any-glob-to-any-file:
+      - 'package.json'
+      - 'package-lock.json'
+      - 'yarn.lock'
+      - 'pnpm-lock.yaml'
+
+# TypeScript/Types
+'typescript':
+  - changed-files:
+    - any-glob-to-any-file:
+      - '**/*.ts'
+      - '**/*.tsx'
+      - '**/*.d.ts'
+      - 'tsconfig*.json'
+
+# Security related
+'security':
+  - changed-files:
+    - any-glob-to-any-file:
+      - '**/auth/**/*'
+      - '**/security/**/*'
+      - 'sentry*.config.*'
+
+# Performance
+'performance':
+  - changed-files:
+    - any-glob-to-any-file:
+      - 'next.config.*'
+      - '**/optimization/**/*'

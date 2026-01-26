@@ -1,0 +1,63 @@
+# Configuration for github/issue-labeler
+# Labels issues and PRs based on title and body content
+
+bug:
+  - '\b(bug|error|issue|problem|crash|broken|fail|fix)\b'
+  - '\b(not working|doesn''t work|does not work)\b'
+
+enhancement:
+  - '\b(feature|enhancement|improvement|request)\b'
+  - '\b(add|implement|support|enable)\b'
+  - '\b(would be nice|could we|can we)\b'
+
+documentation:
+  - '\b(docs|documentation|readme|guide|tutorial)\b'
+  - '\b(explain|clarify|document)\b'
+
+question:
+  - '\b(question|how to|help|wondering)\b'
+  - '\b(what is|why does|when should)\b'
+
+performance:
+  - '\b(performance|slow|speed|optimize|optimization)\b'
+  - '\b(faster|latency|bottleneck)\b'
+
+security:
+  - '\b(security|vulnerability|exploit|xss|csrf|injection)\b'
+  - '\b(auth|authentication|authorization|permission)\b'
+
+ui/ux:
+  - '\b(ui|ux|design|layout|style|styling)\b'
+  - '\b(interface|user experience|look and feel)\b'
+
+database:
+  - '\b(database|db|sql|query|migration|schema)\b'
+  - '\b(prisma|postgres|mysql)\b'
+
+api:
+  - '\b(api|endpoint|route|request|response)\b'
+  - '\b(rest|graphql|trpc)\b'
+
+dependencies:
+  - '\b(dependency|dependencies|package|npm|yarn)\b'
+  - '\b(update|upgrade|version)\b'
+
+testing:
+  - '\b(test|testing|spec|e2e|unit test|integration)\b'
+  - '\b(jest|cypress|playwright)\b'
+
+refactor:
+  - '\b(refactor|refactoring|cleanup|clean up|reorganize)\b'
+  - '\b(code quality|technical debt)\b'
+
+breaking-change:
+  - '\b(breaking change|breaking|backwards incompatible)\b'
+  - '\b(major version|migration required)\b'
+
+good-first-issue:
+  - '\b(good first issue|beginner|easy|starter)\b'
+  - '\b(newcomer|first contribution)\b'
+
+help-wanted:
+  - '\b(help wanted|help needed|looking for help)\b'
+  - '\b(contributions welcome|need help)\b'
