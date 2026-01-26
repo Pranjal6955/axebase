@@ -1,11 +1,19 @@
 import type { NodeExecutor } from "@/features/executions/types";
 import { NonRetriableError } from "inngest";
 import ky, { type Options as KyOptions } from "ky";
+import Handlebars from "handlebars";
+
+Handlebars.registerHelper("json", (context) => {
+  const jsonString = JSON.stringify(context, null, 2);
+  const safeString = new Handlebars.SafeString(jsonString);
+
+  return safeString;
+});
 
 type HttpTriggerData = {
-  variableName?: string;
-  endpoint?: string;
-  method?: "GET" | "POST" | "PUT" | "PATCH" | "DELETE";
+  variableName: string;
+  endpoint: string;
+  method: "GET" | "POST" | "PUT" | "PATCH" | "DELETE";
   body?: string;
 };
 
@@ -21,15 +29,20 @@ export const httpRequestExecutor: NodeExecutor<HttpTriggerData> = async ({
     //TODO : Publish "error" state for HTTP Request
     throw new NonRetriableError("HTTP Request node: No endpoint configured");
   }
-
+  if (!data.method) {
+    //TODO : Publish "error" state for HTTP Request
+    throw new NonRetriableError("HTTP Request node: Method not configured");
+  }
   if (!data.variableName) {
     //TODO : Publish "error" state for HTTP Request
-    throw new NonRetriableError("Variable name not configured");
+    throw new NonRetriableError(
+      "HTTP Request node: Variable name not configured",
+    );
   }
 
   const result = await step.run("http-request", async () => {
-    const endpoint = data.endpoint!;
-    const method = data.method || "GET";
+    const endpoint = Handlebars.compile(data.endpoint)(context);
+    const method = data.method;
 
     const options: KyOptions = {
       method,
@@ -38,7 +51,15 @@ export const httpRequestExecutor: NodeExecutor<HttpTriggerData> = async ({
     };
 
     if (["POST", "PUT", "PATCH"].includes(method)) {
-      options.body = data.body;
+      const resolved = Handlebars.compile(data.body || "{}")(context);
+      try {
+        JSON.parse(resolved);
+      } catch {
+        throw new NonRetriableError(
+          "HTTP Request Node: Request body must be valid JSON",
+        );
+      }
+      options.body = resolved;
       options.headers = {
         "Content-Type": "application/json",
       };
@@ -56,15 +77,10 @@ export const httpRequestExecutor: NodeExecutor<HttpTriggerData> = async ({
         data: responseData,
       },
     };
-    if (data.variableName) {
-      return {
-        ...context,
-        [data.variableName]: responsePayload,
-      };
-    } // Fallback to direct httpResponse for Backward Compatibility
+
     return {
       ...context,
-      ...responsePayload,
+      [data.variableName]: responsePayload,
     };
   });
 

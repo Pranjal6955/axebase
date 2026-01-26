@@ -160,26 +160,115 @@ jobs:
               console.log(`Added labels: ${labelsToAdd.join(', ')}`);
             }
 
-      - name: Label first-time contributors
+      - name: Welcome message for new PRs
         if: github.event_name == 'pull_request' && github.event.action == 'opened'
-        uses: actions/first-interaction@v1
+        uses: actions/github-script@v7
         with:
-          repo-token: ${{ secrets.GITHUB_TOKEN }}
-          pr-message: |
-            👋 Thanks for opening your first pull request! We're excited to have you contributing to the project.
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const author = context.payload.pull_request.user.login;
+            
+            // Check if this is a first-time contributor
+            const { data: prs } = await github.rest.pulls.list({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              state: 'all',
+              creator: author
+            });
+            
+            const { data: issues } = await github.rest.issues.listForRepo({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              state: 'all',
+              creator: author
+            });
+            
+            // Filter out the current PR from the count
+            const previousPRs = prs.filter(pr => pr.number !== context.issue.number);
+            const isFirstTime = previousPRs.length === 0 && issues.length === 0;
+            
+            let message;
+            if (isFirstTime) {
+              message = `🎉 Welcome @${author}! Thanks for opening your **first pull request** in this project! We're excited to have you join our community of contributors.
             
             Please make sure you've:
+            - [ ] Read our [contributing guidelines](../CONTRIBUTING.md) (if available)
             - [ ] Followed our coding standards
             - [ ] Added tests if applicable
             - [ ] Updated documentation if needed
             
-            A maintainer will review your PR soon!
-          issue-message: |
-            👋 Thanks for opening your first issue! We appreciate you taking the time to contribute.
+            A maintainer will review your PR soon. Don't hesitate to ask questions if you need help! 🚀`;
+            } else {
+              message = `👋 Thanks for opening another pull request, @${author}! We appreciate your continued contributions to the project.
+            
+            Quick checklist:
+            - [ ] Followed our coding standards
+            - [ ] Added tests if applicable
+            - [ ] Updated documentation if needed
+            
+            A maintainer will review your PR soon!`;
+            }
+            
+            await github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+              body: message
+            });
+
+      - name: Welcome message for new issues
+        if: github.event_name == 'issues' && github.event.action == 'opened'
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const author = context.payload.issue.user.login;
+            
+            // Check if this is a first-time contributor
+            const { data: prs } = await github.rest.pulls.list({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              state: 'all',
+              creator: author
+            });
+            
+            const { data: issues } = await github.rest.issues.listForRepo({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              state: 'all',
+              creator: author
+            });
+            
+            // Filter out the current issue from the count
+            const previousIssues = issues.filter(issue => issue.number !== context.issue.number && !issue.pull_request);
+            const isFirstTime = prs.length === 0 && previousIssues.length === 0;
+            
+            let message;
+            if (isFirstTime) {
+              message = `🎉 Welcome @${author}! Thanks for opening your **first issue** in this project! We appreciate you taking the time to contribute.
             
             Please make sure you've provided:
-            - [ ] A clear description of the issue
+            - [ ] A clear and descriptive title
+            - [ ] A detailed description of the issue
+            - [ ] Steps to reproduce (if applicable)
+            - [ ] Expected vs actual behavior
+            - [ ] Any relevant screenshots or error messages
+            
+            We'll take a look as soon as possible! Feel free to ask questions if you need clarification. 🙌`;
+            } else {
+              message = `👋 Thanks for opening another issue, @${author}! We appreciate your continued engagement with the project.
+            
+            Quick checklist:
+            - [ ] Clear description of the issue
             - [ ] Steps to reproduce (if applicable)
             - [ ] Expected vs actual behavior
             
-            We'll take a look as soon as possible!
+            We'll take a look as soon as possible!`;
+            }
+            
+            await github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+              body: message
+            });

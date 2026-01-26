@@ -34,7 +34,7 @@ import { useEffect } from "react";
 const formSchema = z.object({
   variableName: z
     .string()
-    .min(1, { message: "Vaiable name is required" })
+    .min(1, { message: "Variable name is required" })
     .regex(/^[A-Za-z_$][A-Za-z0-9_$]*$/, {
       message:
         "Variable name must start with a letter or underscore and contains only letters, numbers and underscores",
