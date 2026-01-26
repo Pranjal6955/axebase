@@ -34,6 +34,7 @@ export function useNodeStatus ({
                 msg.kind === "data" && 
                 msg.channel === channel &&
                 msg.topic === topic && 
+                msg.data &&
                 msg.data.nodeId === nodeId,
         )
         .sort((a,b) => {
