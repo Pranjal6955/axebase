@@ -2,7 +2,7 @@ name: Auto Label PRs and Issues
 
 on:
   pull_request:
-    types: [opened, edited, synchronize, reopened]
+    types: [opened, edited, synchronize, reopened, closed]
   issues:
     types: [opened, edited]
 
@@ -22,8 +22,69 @@ jobs:
         with:
           fetch-depth: 0
 
+      - name: Handle closed PRs
+        if: github.event_name == 'pull_request' && github.event.action == 'closed'
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const issue_number = context.issue.number;
+            
+            // Get all current labels
+            const { data: currentLabels } = await github.rest.issues.listLabelsOnIssue({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: issue_number
+            });
+            
+            // Remove all existing labels
+            for (const label of currentLabels) {
+              try {
+                await github.rest.issues.removeLabel({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  issue_number: issue_number,
+                  name: label.name
+                });
+                console.log(`Removed label: ${label.name}`);
+              } catch (error) {
+                console.log(`Could not remove label ${label.name}: ${error.message}`);
+              }
+            }
+            
+            // Ensure the "Done" label exists with purple color
+            try {
+              await github.rest.issues.getLabel({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                name: 'Done'
+              });
+            } catch (error) {
+              if (error.status === 404) {
+                // Create the label if it doesn't exist
+                await github.rest.issues.createLabel({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  name: 'Done',
+                  color: '8B5CF6',
+                  description: 'This PR has been closed'
+                });
+                console.log('Created "Done" label with purple color');
+              }
+            }
+            
+            // Add the "Done" label
+            await github.rest.issues.addLabels({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: issue_number,
+              labels: ['Done']
+            });
+            
+            console.log('PR closed: Removed all labels and added "Done" label');
+
       - name: Label based on file changes (PRs only)
-        if: github.event_name == 'pull_request'
+        if: github.event_name == 'pull_request' && github.event.action != 'closed'
         uses: actions/labeler@v5
         with:
           repo-token: ${{ secrets.GITHUB_TOKEN }}
@@ -31,7 +92,7 @@ jobs:
           sync-labels: true
 
       - name: Sync size labels (PRs only)
-        if: github.event_name == 'pull_request'
+        if: github.event_name == 'pull_request' && github.event.action != 'closed'
         uses: actions/github-script@v7
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
@@ -183,9 +244,10 @@ jobs:
               creator: author
             });
             
-            // Filter out the current PR from the count
+            // Filter out the current PR and only count actual issues (not PRs)
             const previousPRs = prs.filter(pr => pr.number !== context.issue.number);
-            const isFirstTime = previousPRs.length === 0 && issues.length === 0;
+            const repoIssues = issues.filter(i => !i.pull_request && i.number !== context.issue.number);
+            const isFirstTime = previousPRs.length === 0 && repoIssues.length === 0;
             
             let message;
             if (isFirstTime) {
