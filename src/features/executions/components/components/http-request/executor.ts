@@ -25,7 +25,11 @@ export const httpRequestExecutor: NodeExecutor<HttpTriggerData> = async ({
         const endpoint = data.endpoint!;
         const method = data.method || "GET";
 
-        const options : KyOptions = {method} ;
+        const options : KyOptions = {
+            method,
+            throwHttpErrors: false,
+            timeout: 10_000,
+        };
 
         if (["POST","PUT","PATCH"].includes(method)) {
                 options.body = data.body;
@@ -34,7 +38,6 @@ export const httpRequestExecutor: NodeExecutor<HttpTriggerData> = async ({
         const response = await ky(endpoint, options);
         const contentType = response.headers.get("content-type");
         const responseData = contentType?.includes("application/json") ? await response.json() : await response.text()
-
         return{
             ...context,
             httpResponse: {
