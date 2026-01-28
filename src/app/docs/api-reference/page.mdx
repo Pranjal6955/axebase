@@ -1,23 +1,31 @@
+export const metadata = {
+  title: 'API Reference'
+}
+
 # API Reference
 
-Complete API reference for Axe.ai.
+Complete API reference for Axebase.
 
 ## Core APIs
 
 ### `useAxe()`
 
-The main hook for accessing Axe.ai functionality.
+The main hook for accessing Axebase functionality.
 
 ```typescript
 import { useAxe } from 'axebase'
 
-function MyComponent() {
+async function MyComponent() {
   const axe = useAxe()
   
-  // Use axe methods
-  const result = axe.process(data)
-  
-  return <div>{result}</div>
+  try {
+    // Use axe methods - axe.process is async and must be awaited
+    const result = await axe.process(data)
+    return <div>{result}</div>
+  } catch (error) {
+    console.error('Processing failed:', error)
+    return <div>Error processing data</div>
+  }
 }
 ```
 
@@ -35,7 +43,7 @@ Returns an Axe instance with the following methods:
 
 ### `AxeProvider`
 
-Context provider for Axe.ai.
+Context provider for Axebase.
 
 ```typescript
 import { AxeProvider } from 'axebase'

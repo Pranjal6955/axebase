@@ -9,6 +9,7 @@ import {
   StarIcon,
 } from "lucide-react";
 import Image from "next/image";
+import { LogoSwitcher } from "./logo-switcher";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import {
@@ -59,13 +60,8 @@ export const AppSidebar = () => {
         <SidebarMenuItem>
           <SidebarMenuButton asChild className="gap-x-4 h-10 px-4">
             <Link href="/workflows" prefetch>
-              <Image
-                alt="Axebase"
-                src="/logos/light_logos.png"
-                width={35}
-                height={35}
-              />
-              <span className="font-semibold text-lg">AxeBase</span>
+              <LogoSwitcher width={35} height={35} />
+              <span className="font-semibold text-lg">Axebase</span>
             </Link>
           </SidebarMenuButton>
         </SidebarMenuItem>

@@ -1,64 +1,53 @@
 import { ReactNode } from 'react'
 import { Footer, Layout, Navbar } from 'nextra-theme-docs'
-import { Banner, Head } from 'nextra/components'
+import { Banner } from 'nextra/components'
 import { getPageMap } from 'nextra/page-map'
 import 'nextra-theme-docs/style.css'
 import './docs.css'
+import { LogoSwitcher } from '@/components/logo-switcher'
 
 export const metadata = {
     title: {
-        default: 'Axe.ai Documentation',
-        template: '%s | Axe.ai Docs'
+        default: 'Axebase Documentation',
+        template: '%s | Axebase Docs'
     },
-    description: 'Complete documentation for Axe.ai - Your AI-powered platform for modern applications',
-    keywords: ['Axe.ai', 'documentation', 'API', 'guides', 'tutorials'],
+    description: 'Complete documentation for Axebase - Your AI-powered platform for modern applications',
+    keywords: ['Axebase', 'documentation', 'API', 'guides', 'tutorials'],
     openGraph: {
-        title: 'Axe.ai Documentation',
-        description: 'Complete documentation for Axe.ai platform',
+        title: 'Axebase Documentation',
+        description: 'Complete documentation for Axebase platform',
         type: 'website'
     }
 }
 
-const banner = <Banner storageKey="axe-ai-banner">🚀 Welcome to Axe.ai Documentation - Your AI-powered platform!</Banner>
+const banner = <Banner storageKey="axebase-banner">🚀 Welcome to Axebase Documentation - Your AI-powered platform!</Banner>
 const navbar = (
     <Navbar
         logo={
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontWeight: 'bold' }}>
-                <span style={{ fontSize: '24px' }}>⚡</span>
-                <span>Axe.ai</span>
+                <LogoSwitcher width={24} height={24} />
+                <span>Axebase</span>
             </div>
         }
         projectLink="https://github.com/Pranjal6955/axebase"
     />
 )
-const footer = <Footer>MIT {new Date().getFullYear()} © Axe.ai. Built with ❤️</Footer>
+const footer = <Footer>MIT {new Date().getFullYear()} © Axebase. Built with ❤️</Footer>
 
-export default async function RootLayout({ children }: { children: ReactNode }) {
+export default async function DocsLayout({ children }: { children: ReactNode }) {
+    const allPages = await getPageMap()
+    const docsFolder = allPages.find((page: any) => page.route === '/docs')
+    const docsPages = (docsFolder as any)?.children || []
+
     return (
-        <html
-            // Not required, but good for SEO
-            lang="en"
-            // Required to be set
-            dir="ltr"
-            // Suggested by `next-themes` package https://github.com/pacocoursey/next-themes#with-app
-            suppressHydrationWarning
+        <Layout
+            banner={banner}
+            navbar={navbar}
+            pageMap={docsPages}
+            docsRepositoryBase="https://github.com/Pranjal6955/axebase/tree/main/src/app/docs"
+            footer={footer}
         >
-            <Head>
-                {/* Your additional head options */}
-                {/* Your additional tags should be passed as `children` of `<Head>` element */}
-            </Head>
-            <body>
-                <Layout
-                    banner={banner}
-                    navbar={navbar}
-                    pageMap={await getPageMap()}
-                    docsRepositoryBase="https://github.com/shuding/nextra/tree/main/docs"
-                    footer={footer}
-                // ... Your additional layout options
-                >
-                    {children}
-                </Layout>
-            </body>
-        </html>
+            {children}
+        </Layout>
     )
 }

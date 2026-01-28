@@ -1,6 +1,10 @@
-# Getting Started with Axe.ai
+export const metadata = {
+  title: 'Getting Started'
+}
 
-This guide will help you get started with Axe.ai quickly and easily.
+# Getting Started with Axebase
+
+This guide will help you get started with Axebase quickly and easily.
 
 ## Prerequisites
 
@@ -12,48 +16,65 @@ Before you begin, make sure you have:
 
 ## Installation
 
-### Using npm
+### Clone the Repository
+
+Since Axebase is a private project, you'll need to clone it from GitHub:
 
 ```bash
-npm install axebase
+git clone https://github.com/Pranjal6955/axebase.git
+cd axebase
 ```
 
-### Using yarn
+### Install Dependencies
+
+Choose your preferred package manager:
+
+**Using npm:**
+```bash
+npm install
+```
+
+**Using yarn:**
+```bash
+yarn install
+```
+
+**Using pnpm:**
+```bash
+pnpm install
+```
+
+## Setup Your Project
+
+Follow these steps to set up your Axebase project:
+
+1. **Environment Configuration**
 
 ```bash
-yarn add axebase
+cp .env.example .env
 ```
 
-### Using pnpm
+Edit the `.env` file and add your Database URL, AI API keys, and other required credentials.
+
+2. **Prepare Database**
 
 ```bash
-pnpm add axebase
+npx prisma db push
 ```
 
-## Your First Project
-
-Let's create your first Axe.ai project:
-
-1. **Initialize your project**
-
-```bash
-npx create-axe-app my-app
-cd my-app
-```
-
-2. **Start the development server**
+3. **Start the development server**
 
 ```bash
 npm run dev
 ```
 
-3. **Open your browser**
+4. **Open your browser**
 
 Navigate to `http://localhost:3000` to see your app running!
 
 ## Project Structure
 
-Your Axe.ai project will have the following structure:
+Your Axebase project will have the following structure:
 
 ```
 my-app/
@@ -91,8 +112,4 @@ Now that you have a basic setup, you can:
 
 ## Need Help?
 
-If you run into any issues:
-
-- Check our [FAQ](#)
-- Visit our [GitHub Issues](https://github.com/Pranjal6955/axebase/issues)
-- Join our [Discord community](#)
+If you run into any issues, visit our [GitHub Issues](https://github.com/Pranjal6955/axebase/issues) to report bugs or request features.
