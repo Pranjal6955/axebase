@@ -4,134 +4,42 @@ export const metadata = {
 
 # API Reference
 
-Complete API reference for Axebase.
+Axebase primarily uses **tRPC** for client-server communication, ensuring end-to-end type safety.
 
-## Core APIs
+## tRPC API
 
-### `useAxe()`
+The API is structured into routers located in `src/features/*/server/routers.ts`.
 
-The main hook for accessing Axebase functionality.
+### Key Routers
 
-```typescript
-import { useAxe } from 'axebase'
+- **`auth`**: Authentication methods.
+- **`workflows`**: CRUD operations for workflows.
+- **`executions`**: Managing and triggering workflow executions.
+- **`triggers`**: Configuring workflow triggers.
 
-async function MyComponent() {
-  const axe = useAxe()
-  
-  try {
-    // Use axe methods - axe.process is async and must be awaited
-    const result = await axe.process(data)
-    return <div>{result}</div>
-  } catch (error) {
-    console.error('Processing failed:', error)
-    return <div>Error processing data</div>
-  }
-}
-```
+### Usage in Client
 
-#### Parameters
-
-- `config` (optional): Configuration object
-
-#### Returns
-
-Returns an Axe instance with the following methods:
-
-- `process(data)`: Process your data
-- `analyze(input)`: Analyze input
-- `transform(value)`: Transform values
-
-### `AxeProvider`
-
-Context provider for Axebase.
+If you are developing features within the Axebase repo, you can use the tRPC hooks:
 
 ```typescript
-import { AxeProvider } from 'axebase'
+import { trpc } from '@/trpc/client';
 
-function App() {
-  return (
-    <AxeProvider config={{ theme: 'dark' }}>
-      <YourApp />
-    </AxeProvider>
-  )
-}
+// Example: tailored for React components
+const { data: workflows, isLoading } = trpc.workflows.getWorkflows.useQuery();
 ```
 
-#### Props
+## Database Schema
 
-| Prop | Type | Required | Description |
-|------|------|----------|-------------|
-| `config` | `AxeConfig` | No | Configuration object |
-| `children` | `ReactNode` | Yes | Child components |
+The core data models are defined in `prisma/schema.prisma`.
 
-## Configuration
+### Workflow
+- `id`: Unique identifier (CUID).
+- `name`: Workflow name.
+- `nodes`: JSON definition or relation to Node definitions.
+- `connections`: Graph connections between nodes.
 
-### AxeConfig
+## Authentication
 
-```typescript
-interface AxeConfig {
-  theme?: 'light' | 'dark' | 'auto'
-  analytics?: boolean
-  apiKey?: string
-  endpoint?: string
-}
-```
+Authentication is handled by **Better Auth**. Session tokens are managed securely via cookies.
 
-## Utilities
-
-### `formatData()`
-
-Format data for display.
-
-```typescript
-import { formatData } from 'axebase/utils'
-
-const formatted = formatData(rawData, {
-  format: 'json',
-  pretty: true
-})
-```
-
-### `validateInput()`
-
-Validate input data.
-
-```typescript
-import { validateInput } from 'axebase/utils'
-
-const isValid = validateInput(data, schema)
-```
-
-## Types
-
-### Core Types
-
-```typescript
-type AxeResult<T> = {
-  data: T
-  error?: Error
-  status: 'success' | 'error' | 'pending'
-}
-
-type AxeOptions = {
-  retry?: number
-  timeout?: number
-  cache?: boolean
-}
-```
-
-## Error Handling
-
-All API methods can throw errors. Always wrap them in try-catch:
-
-```typescript
-try {
-  const result = await axe.process(data)
-} catch (error) {
-  console.error('Processing failed:', error)
-}
-```
-
-## Advanced Usage
-
-For advanced use cases, see our [Guides](/docs/guides) section.
+To make authenticated requests serverside, you can use the caller factory or helper functions provided in `src/features/auth`.
