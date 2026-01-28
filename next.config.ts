@@ -1,5 +1,10 @@
 import { withSentryConfig } from "@sentry/nextjs";
 import type { NextConfig } from "next";
+import nextra from 'nextra';
+
+const withNextra = nextra({
+  defaultShowCopyCode: true,
+});
 
 const nextConfig: NextConfig = {
   async redirects() {
@@ -13,7 +18,7 @@ const nextConfig: NextConfig = {
   },
 };
 
-export default withSentryConfig(nextConfig, {
+export default withSentryConfig(withNextra(nextConfig), {
   // For all available options, see:
   // https://www.npmjs.com/package/@sentry/webpack-plugin#options
 
