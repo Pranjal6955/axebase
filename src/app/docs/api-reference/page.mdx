@@ -1,0 +1,129 @@
+# API Reference
+
+Complete API reference for Axe.ai.
+
+## Core APIs
+
+### `useAxe()`
+
+The main hook for accessing Axe.ai functionality.
+
+```typescript
+import { useAxe } from 'axebase'
+
+function MyComponent() {
+  const axe = useAxe()
+  
+  // Use axe methods
+  const result = axe.process(data)
+  
+  return <div>{result}</div>
+}
+```
+
+#### Parameters
+
+- `config` (optional): Configuration object
+
+#### Returns
+
+Returns an Axe instance with the following methods:
+
+- `process(data)`: Process your data
+- `analyze(input)`: Analyze input
+- `transform(value)`: Transform values
+
+### `AxeProvider`
+
+Context provider for Axe.ai.
+
+```typescript
+import { AxeProvider } from 'axebase'
+
+function App() {
+  return (
+    <AxeProvider config={{ theme: 'dark' }}>
+      <YourApp />
+    </AxeProvider>
+  )
+}
+```
+
+#### Props
+
+| Prop | Type | Required | Description |
+|------|------|----------|-------------|
+| `config` | `AxeConfig` | No | Configuration object |
+| `children` | `ReactNode` | Yes | Child components |
+
+## Configuration
+
+### AxeConfig
+
+```typescript
+interface AxeConfig {
+  theme?: 'light' | 'dark' | 'auto'
+  analytics?: boolean
+  apiKey?: string
+  endpoint?: string
+}
+```
+
+## Utilities
+
+### `formatData()`
+
+Format data for display.
+
+```typescript
+import { formatData } from 'axebase/utils'
+
+const formatted = formatData(rawData, {
+  format: 'json',
+  pretty: true
+})
+```
+
+### `validateInput()`
+
+Validate input data.
+
+```typescript
+import { validateInput } from 'axebase/utils'
+
+const isValid = validateInput(data, schema)
+```
+
+## Types
+
+### Core Types
+
+```typescript
+type AxeResult<T> = {
+  data: T
+  error?: Error
+  status: 'success' | 'error' | 'pending'
+}
+
+type AxeOptions = {
+  retry?: number
+  timeout?: number
+  cache?: boolean
+}
+```
+
+## Error Handling
+
+All API methods can throw errors. Always wrap them in try-catch:
+
+```typescript
+try {
+  const result = await axe.process(data)
+} catch (error) {
+  console.error('Processing failed:', error)
+}
+```
+
+## Advanced Usage
+
+For advanced use cases, see our [Guides](/docs/guides) section.

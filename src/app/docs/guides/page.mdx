@@ -1,0 +1,153 @@
+# Guides
+
+Learn how to use Axe.ai effectively with our comprehensive guides.
+
+## Available Guides
+
+### Getting Started
+- [Installation and Setup](/docs/getting-started)
+- [Your First Project](/docs/getting-started#your-first-project)
+- [Configuration](/docs/getting-started#configuration)
+
+### Core Concepts
+
+#### Data Processing
+
+Learn how to process data efficiently:
+
+```typescript
+import { useAxe } from 'axebase'
+
+export function DataProcessor() {
+  const axe = useAxe()
+  
+  const processData = async (input: any) => {
+    const result = await axe.process(input)
+    return result
+  }
+  
+  return <div>Processing results</div>
+}
+```
+
+#### State Management
+
+Manage state in your Axe.ai applications:
+
+```typescript
+import { useState } from 'react'
+import { useAxe } from 'axebase'
+
+export function StateExample() {
+  const [data, setData] = useState(null)
+  const axe = useAxe()
+  
+  const handleUpdate = async () => {
+    const result = await axe.analyze(data)
+    setData(result)
+  }
+  
+  return <button onClick={handleUpdate}>Update</button>
+}
+```
+
+### Best Practices
+
+1. **Always handle errors properly**
+   ```typescript
+   try {
+     await axe.process(data)
+   } catch (error) {
+     // Handle error
+   }
+   ```
+
+2. **Use TypeScript for type safety**
+   ```typescript
+   interface MyData {
+     id: string
+     value: number
+   }
+   
+   const result: AxeResult<MyData> = await axe.process(input)
+   ```
+
+3. **Optimize performance**
+   - Use caching when appropriate
+   - Batch operations when possible
+   - Implement proper loading states
+
+### Advanced Topics
+
+#### Custom Hooks
+
+Create custom hooks for reusable logic:
+
+```typescript
+import { useState, useEffect } from 'react'
+import { useAxe } from 'axebase'
+
+export function useAxeData(initialData: any) {
+  const [data, setData] = useState(initialData)
+  const [loading, setLoading] = useState(false)
+  const axe = useAxe()
+  
+  const refresh = async () => {
+    setLoading(true)
+    try {
+      const result = await axe.process(data)
+      setData(result)
+    } finally {
+      setLoading(false)
+    }
+  }
+  
+  return { data, loading, refresh }
+}
+```
+
+#### Integration with Other Libraries
+
+Axe.ai works well with popular libraries:
+
+- **React Query**: For data fetching
+- **Zustand**: For state management
+- **Zod**: For validation
+
+### Deployment
+
+#### Vercel
+
+Deploy to Vercel with one command:
+
+```bash
+vercel deploy
+```
+
+#### Docker
+
+Build a Docker image:
+
+```dockerfile
+FROM node:18-alpine
+WORKDIR /app
+COPY package*.json ./
+RUN npm install
+COPY . .
+RUN npm run build
+CMD ["npm", "start"]
+```
+
+### Troubleshooting
+
+Common issues and solutions:
+
+- **Build errors**: Check Node.js version
+- **Runtime errors**: Verify API keys
+- **Performance issues**: Enable caching
+
+## More Resources
+
+- [API Reference](/docs/api-reference)
+- [GitHub Repository](https://github.com/Pranjal6955/axebase)
+- [Community Forum](#)

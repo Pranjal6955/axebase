@@ -1,0 +1,20 @@
+{
+    "index": {
+        "title": "Introduction",
+        "theme": {
+            "breadcrumb": true
+        }
+    },
+    "getting-started": {
+        "title": "Getting Started",
+        "icon": "🚀"
+    },
+    "guides": {
+        "title": "Guides",
+        "icon": "📖"
+    },
+    "api-reference": {
+        "title": "API Reference",
+        "icon": "⚡"
+    }
+}
