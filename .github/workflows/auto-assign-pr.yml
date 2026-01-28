@@ -1,0 +1,66 @@
+name: Axe Bot
+
+on:
+  pull_request:
+    types: [opened]
+
+permissions:
+  contents: read
+  pull-requests: write
+  issues: write
+
+jobs:
+  auto-assign:
+    runs-on: ubuntu-latest
+    name: Auto Assign PR Author and Reviewers
+    
+    steps:
+      - name: Auto-assign PR author and request reviewers
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const pr = context.payload.pull_request;
+            const author = pr.user.login;
+            const prNumber = pr.number;
+            
+            console.log(`Processing PR #${prNumber} by @${author}`);
+            
+            // Assign the PR author to the PR
+            try {
+              await github.rest.issues.addAssignees({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: prNumber,
+                assignees: [author]
+              });
+              console.log(`✅ Successfully assigned @${author} to PR #${prNumber}`);
+            } catch (error) {
+              console.log(`❌ Could not assign @${author}: ${error.message}`);
+            }
+            
+            // Request reviewers (CODEOWNERS will be automatically requested by GitHub)
+            // But we can also explicitly request reviewers here to ensure it happens
+            try {
+              // Define the default reviewers
+              const reviewers = ['Pranjal6955'];
+              
+              // Don't request the author as a reviewer
+              const filteredReviewers = reviewers.filter(r => r !== author);
+              
+              if (filteredReviewers.length > 0) {
+                await github.rest.pulls.requestReviewers({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  pull_number: prNumber,
+                  reviewers: filteredReviewers
+                });
+                console.log(`✅ Successfully requested reviewers: ${filteredReviewers.join(', ')}`);
+              } else {
+                console.log(`ℹ️ No reviewers to request (author is the only reviewer)`);
+              }
+            } catch (error) {
+              console.log(`❌ Could not request reviewers: ${error.message}`);
+            }
+            
+            console.log(`🎉 Auto-assignment complete for PR #${prNumber}`);

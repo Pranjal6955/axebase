@@ -1,5 +1,9 @@
-import { initTRPC } from "@trpc/server";
+import { auth } from "@/lib/auth";
+import { initTRPC, TRPCError } from "@trpc/server";
 import { cache } from "react";
+import { headers } from "next/headers";
+import superjson from "superjson";
+import { polarClient } from "@/lib/polar";
 export const createTRPCContext = cache(async () => {
   /**
    * @see: https://trpc.io/docs/server/context
@@ -14,9 +18,51 @@ const t = initTRPC.create({
   /**
    * @see https://trpc.io/docs/server/data-transformers
    */
-  // transformer: superjson,
+  transformer: superjson,
 });
 // Base router and procedure helpers
 export const createTRPCRouter = t.router;
 export const createCallerFactory = t.createCallerFactory;
 export const baseProcedure = t.procedure;
+export const protectedProcedure = baseProcedure.use(async ({ ctx, next }) => {
+  const session = await auth.api.getSession({
+    headers: await headers(),
+  });
+  if (!session) {
+    throw new TRPCError({
+      code: "UNAUTHORIZED",
+      message: "Unauthorized",
+    });
+  }
+
+  return next({ ctx: { ...ctx, auth: session } });
+});
+
+export const premiumProcedure = protectedProcedure.use(
+  async ({ ctx, next }) => {
+    try {
+      const customerState = await polarClient.customers.getStateExternal({
+        externalId: ctx.auth.user.id,
+      });
+      if (
+        !customerState.activeSubscriptions ||
+        customerState.activeSubscriptions.length === 0
+      ) {
+        throw new TRPCError({
+          code: "FORBIDDEN",
+          message: "Active Subscription required",
+        });
+      }
+
+      return next({ ctx: { ...ctx, customerState } });
+    } catch (error) {
+      if (error instanceof TRPCError) {
+        throw error;
+      }
+      throw new TRPCError({
+        code: "INTERNAL_SERVER_ERROR",
+        message: "Unable to verify subscription status",
+      });
+    }
+  },
+);
