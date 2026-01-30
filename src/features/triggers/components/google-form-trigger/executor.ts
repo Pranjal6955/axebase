@@ -32,4 +32,3 @@ export const googleFormTriggerExecutor: NodeExecutor<
     throw error;
   }
 };
-};
