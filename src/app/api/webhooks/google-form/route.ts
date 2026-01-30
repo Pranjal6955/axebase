@@ -5,6 +5,15 @@ export async function POST(request: NextRequest) {
   try {
     const url = new URL(request.url);
     const workflowId = url.searchParams.get("workflowId");
+    const secret = process.env.GOOGLE_FORM_WEBHOOK_SECRET;
+    const provided =
+      request.headers.get("x-webhook-secret") ?? url.searchParams.get("secret");
+    if (!secret || provided !== secret) {
+      return NextResponse.json(
+        { success: false, error: "Unauthorized" },
+        { status: 401 },
+      );
+    }
 
     if (!workflowId) {
       return NextResponse.json(
