@@ -10,7 +10,6 @@ import { useNodeStatus } from "../../hooks/use-node-status";
 import { fetchHttpRequestRealtimeToken } from "./actions";
 import { HTTP_REQUEST_CHANNEL_NAME } from "@/inngest/channels/http-request";
 
-
 type HttpRequestNodeData = {
   variableName?: string;
   endpoint?: string;
