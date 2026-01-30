@@ -13,7 +13,7 @@ export const GoogleFormTrigger = memo((props: NodeProps) => {
     channel: GOOGLE_FORM_TRIGGER_CHANNEL_NAME,
     topic: "status",
     refreshToken: fetchGoogleFormTriggerRealtimeToken,
-  })
+  });
   const handleOpenSetting = () => setDialogOpen(true);
   return (
     <>
@@ -21,7 +21,7 @@ export const GoogleFormTrigger = memo((props: NodeProps) => {
       <BaseTriggerNode
         {...props}
         icon="/logos/googleform.svg"
-        name = "Google Form"
+        name="Google Form"
         description="When form is submitted"
         status={nodestatus}
         onSetting={handleOpenSetting}

@@ -14,7 +14,7 @@ export const ManualTriggerNode = memo((props: NodeProps) => {
     channel: MANUAL_TRIGGER_CHANNEL_NAME,
     topic: "status",
     refreshToken: fetchManualTriggerRealtimeToken,
-  })
+  });
   const handleOpenSetting = () => setDialogOpen(true);
   return (
     <>

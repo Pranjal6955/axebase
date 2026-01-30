@@ -9,18 +9,19 @@ import { manualTriggerChannel } from "./channels/manual-trigger";
 import { googleFormTriggerChannel } from "./channels/google-form-trigger";
 
 export const executeWorkflow = inngest.createFunction(
-  { 
+  {
     id: "execute-workflow",
     retries: 0, //TODO: REMOVE IN PRODUCTION
-   },
-  { event: "workflows/execute.workflow",
+  },
+  {
+    event: "workflows/execute.workflow",
     channels: [
       httpRequestChannel(),
       manualTriggerChannel(),
       googleFormTriggerChannel(),
-    ]
-   },
-  async ({ event, step,publish }) => {
+    ],
+  },
+  async ({ event, step, publish }) => {
     const workflowId = event.data.workflowId;
 
     if (!workflowId) {
