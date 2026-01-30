@@ -74,7 +74,7 @@ export const GoogleFormTriggerDialog = ({ open, onOpenChange }: Props) => {
               <li>Open your Google Form</li>
               <li>Click the three dots menu → Script editor</li>
               <li>Copy and Paste the Script Below</li>
-              <li>Replace WEBHOOK_URL with your webhook URL above</li>
+              <li>Use the script below as-is (it already includes your webhook URL)</li>
               <li>Save and Click "Triggers" → Add Trigger</li>
               <li>Choose: From form → on form submit → Save</li>
             </ol>
@@ -95,7 +95,7 @@ export const GoogleFormTriggerDialog = ({ open, onOpenChange }: Props) => {
                 }
               }}
             >
-              <CopyIcon className="size-4 mr-2" />
+              <CopyIcon className="sie-4 mr-2" />
               Copy Google Apps Script
             </Button>
             <p className="text-xs text-muted-foreground">
@@ -109,7 +109,7 @@ export const GoogleFormTriggerDialog = ({ open, onOpenChange }: Props) => {
                 <code className="bg-background px-1 py-0.5 rounded">
                   {"{{googleForm.respondentEmail}}"}
                 </code>{" "}
-                - Respondent-s email
+                - Respondent's email
               </li>
               <li>
                 <code className="bg-background px-1 py-0.5 rounded">
