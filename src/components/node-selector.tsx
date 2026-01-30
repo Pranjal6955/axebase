@@ -37,7 +37,7 @@ const triggerNodes: NodeTypeOption[] = [
   {
     type: NodeType.GOOGLE_FORM_TRIGGER,
     label: "Google Form",
-    description: "Runs the flow on when a Google Form is submitted",
+    description: "Runs the flow when a Google Form is submitted",
     icon: "/logos/googleform.svg",
   },
 ];
