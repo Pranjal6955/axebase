@@ -95,7 +95,7 @@ export const GoogleFormTriggerDialog = ({ open, onOpenChange }: Props) => {
                 }
               }}
             >
-              <CopyIcon className="sie-4 mr-2" />
+              <CopyIcon className="size-4 mr-2" />
               Copy Google Apps Script
             </Button>
             <p className="text-xs text-muted-foreground">
