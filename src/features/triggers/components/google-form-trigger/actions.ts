@@ -1,17 +1,30 @@
 "use server";
 
-import { getSubscriptionToken, type Realtime } from "@inngest/realtime";
+import { getSubscriptionToken } from "@inngest/realtime";
 import { inngest } from "@/inngest/client";
 import { googleFormTriggerChannel } from "@/inngest/channels/google-form-trigger";
+import { requireAuth } from "@/lib/auth-utils";
+import prisma from "@/lib/db";
 
-export type GoogleFormTriggerToken = Realtime.Token<
-  typeof googleFormTriggerChannel,
-  ["status"]
->;
+export async function fetchGoogleFormTriggerRealtimeToken(workflowId: string) {
+  // Authenticate the caller
+  const { user } = await requireAuth();
 
-export async function fetchGoogleFormTriggerRealtimeToken(): Promise<GoogleFormTriggerToken> {
+  // Verify user has access to this workflow
+  const workflow = await prisma.workflow.findUnique({
+    where: {
+      id: workflowId,
+      userId: user.id,
+    },
+  });
+
+  if (!workflow) {
+    throw new Error("Unauthorized: Workflow not found or access denied");
+  }
+
+  // Generate token with scoped channel
   const token = await getSubscriptionToken(inngest, {
-    channel: googleFormTriggerChannel(),
+    channel: googleFormTriggerChannel(workflowId, user.id),
     topics: ["status"],
   });
 

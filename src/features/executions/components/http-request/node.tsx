@@ -9,6 +9,8 @@ import { BaseExecutionNode } from "../base-execution-node";
 import { useNodeStatus } from "../../hooks/use-node-status";
 import { fetchHttpRequestRealtimeToken } from "./actions";
 import { HTTP_REQUEST_CHANNEL_NAME } from "@/inngest/channels/http-request";
+import { useAtomValue } from "jotai";
+import { workflowIdAtom } from "@/features/editor/store/atoms";
 
 type HttpRequestNodeData = {
   variableName?: string;
@@ -22,12 +24,18 @@ type HttpRequestNodeType = Node<HttpRequestNodeData>;
 export const HttpRequestNode = memo((props: NodeProps<HttpRequestNodeType>) => {
   const [dialogOpen, setDialogOpen] = useState(false);
   const { setNodes } = useReactFlow();
+  const workflowId = useAtomValue(workflowIdAtom);
 
   const nodestatus = useNodeStatus({
     nodeId: props.id,
     channel: HTTP_REQUEST_CHANNEL_NAME,
     topic: "status",
-    refreshToken: fetchHttpRequestRealtimeToken,
+    refreshToken: () => {
+      if (!workflowId) {
+        throw new Error("Workflow ID not available");
+      }
+      return fetchHttpRequestRealtimeToken(workflowId);
+    },
   });
 
   const handleOpenSetting = () => setDialogOpen(true);

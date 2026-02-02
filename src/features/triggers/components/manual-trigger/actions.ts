@@ -1,17 +1,30 @@
 "use server";
 
-import { getSubscriptionToken, type Realtime } from "@inngest/realtime";
+import { getSubscriptionToken } from "@inngest/realtime";
 import { inngest } from "@/inngest/client";
 import { manualTriggerChannel } from "@/inngest/channels/manual-trigger";
+import { requireAuth } from "@/lib/auth-utils";
+import prisma from "@/lib/db";
 
-export type ManualTriggerToken = Realtime.Token<
-  typeof manualTriggerChannel,
-  ["status"]
->;
+export async function fetchManualTriggerRealtimeToken(workflowId: string) {
+  // Authenticate the caller
+  const { user } = await requireAuth();
 
-export async function fetchManualTriggerRealtimeToken(): Promise<ManualTriggerToken> {
+  // Verify user has access to this workflow
+  const workflow = await prisma.workflow.findUnique({
+    where: {
+      id: workflowId,
+      userId: user.id,
+    },
+  });
+
+  if (!workflow) {
+    throw new Error("Unauthorized: Workflow not found or access denied");
+  }
+
+  // Generate token with scoped channel
   const token = await getSubscriptionToken(inngest, {
-    channel: manualTriggerChannel(),
+    channel: manualTriggerChannel(workflowId, user.id),
     topics: ["status"],
   });
 
