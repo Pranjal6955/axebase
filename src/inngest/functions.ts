@@ -41,7 +41,7 @@ export const executeWorkflow = inngest.createFunction(
       },
     );
 
-    // Intialize the context with any initial data from the trigger
+    // Initialize the context with any initial data from the trigger
     let context = event.data.initialData || {};
 
     //Execute each nodes
