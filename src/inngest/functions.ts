@@ -4,9 +4,6 @@ import prisma from "@/lib/db";
 import { topologicalSort } from "./utils";
 import { NodeType } from "@prisma/client";
 import { getExecutor } from "@/features/executions/lib/executor-registry";
-import { httpRequestChannel } from "./channels/http-request";
-import { manualTriggerChannel } from "./channels/manual-trigger";
-import { googleFormTriggerChannel } from "./channels/google-form-trigger";
 
 export const executeWorkflow = inngest.createFunction(
   {
@@ -15,11 +12,6 @@ export const executeWorkflow = inngest.createFunction(
   },
   {
     event: "workflows/execute.workflow",
-    channels: [
-      httpRequestChannel(),
-      manualTriggerChannel(),
-      googleFormTriggerChannel(),
-    ],
   },
   async ({ event, step, publish }) => {
     const workflowId = event.data.workflowId;
@@ -27,16 +19,27 @@ export const executeWorkflow = inngest.createFunction(
     if (!workflowId) {
       throw new NonRetriableError("workflow ID is missing");
     }
-    const sortedNodes = await step.run("prepare-workflow", async () => {
-      const workflow = await prisma.workflow.findUniqueOrThrow({
-        where: { id: workflowId },
-        include: {
-          nodes: true,
-          connections: true,
-        },
-      });
-      return topologicalSort(workflow.nodes, workflow.connections);
-    });
+    const { sortedNodes, userId } = await step.run(
+      "prepare-workflow",
+      async () => {
+        const workflow = await prisma.workflow.findUniqueOrThrow({
+          where: { id: workflowId },
+          include: {
+            nodes: true,
+            connections: true,
+            user: {
+              select: {
+                id: true,
+              },
+            },
+          },
+        });
+        return {
+          sortedNodes: topologicalSort(workflow.nodes, workflow.connections),
+          userId: workflow.user.id,
+        };
+      },
+    );
 
     // Intialize the context with any initial data from the trigger
     let context = event.data.initialData || {};
@@ -50,6 +53,8 @@ export const executeWorkflow = inngest.createFunction(
         context,
         step,
         publish,
+        workflowId,
+        userId,
       });
     }
 

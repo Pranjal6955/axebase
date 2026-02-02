@@ -24,16 +24,18 @@ export const httpRequestExecutor: NodeExecutor<HttpTriggerData> = async ({
   context,
   step,
   publish,
+  workflowId,
+  userId,
 }) => {
   await publish(
-    httpRequestChannel().status({
+    httpRequestChannel(workflowId, userId).status({
       nodeId,
       status: "loading",
     }),
   );
   if (!data.endpoint) {
     await publish(
-      httpRequestChannel().status({
+      httpRequestChannel(workflowId, userId).status({
         nodeId,
         status: "error",
       }),
@@ -42,7 +44,7 @@ export const httpRequestExecutor: NodeExecutor<HttpTriggerData> = async ({
   }
   if (!data.method) {
     await publish(
-      httpRequestChannel().status({
+      httpRequestChannel(workflowId, userId).status({
         nodeId,
         status: "error",
       }),
@@ -51,7 +53,7 @@ export const httpRequestExecutor: NodeExecutor<HttpTriggerData> = async ({
   }
   if (!data.variableName) {
     await publish(
-      httpRequestChannel().status({
+      httpRequestChannel(workflowId, userId).status({
         nodeId,
         status: "error",
       }),
@@ -106,7 +108,7 @@ export const httpRequestExecutor: NodeExecutor<HttpTriggerData> = async ({
     });
 
     await publish(
-      httpRequestChannel().status({
+      httpRequestChannel(workflowId, userId).status({
         nodeId,
         status: "success",
       }),
@@ -115,7 +117,7 @@ export const httpRequestExecutor: NodeExecutor<HttpTriggerData> = async ({
     return result;
   } catch (error) {
     await publish(
-      httpRequestChannel().status({
+      httpRequestChannel(workflowId, userId).status({
         nodeId,
         status: "error",
       }),

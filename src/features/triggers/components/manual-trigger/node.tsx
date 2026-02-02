@@ -6,14 +6,23 @@ import { ManualTriggerDialog } from "./dialog";
 import { useNodeStatus } from "@/features/executions/hooks/use-node-status";
 import { MANUAL_TRIGGER_CHANNEL_NAME } from "@/inngest/channels/manual-trigger";
 import { fetchManualTriggerRealtimeToken } from "./actions";
+import { useAtomValue } from "jotai";
+import { workflowIdAtom } from "@/features/editor/store/atoms";
 
 export const ManualTriggerNode = memo((props: NodeProps) => {
   const [dialogOpen, setDialogOpen] = useState(false);
+  const workflowId = useAtomValue(workflowIdAtom);
+
   const nodestatus = useNodeStatus({
     nodeId: props.id,
     channel: MANUAL_TRIGGER_CHANNEL_NAME,
     topic: "status",
-    refreshToken: fetchManualTriggerRealtimeToken,
+    refreshToken: () => {
+      if (!workflowId) {
+        throw new Error("Workflow ID not available");
+      }
+      return fetchManualTriggerRealtimeToken(workflowId);
+    },
   });
   const handleOpenSetting = () => setDialogOpen(true);
   return (
