@@ -1,6 +1,6 @@
 import { withSentryConfig } from "@sentry/nextjs";
 import type { NextConfig } from "next";
-import nextra from 'nextra';
+import nextra from "nextra";
 
 const withNextra = nextra({
   defaultShowCopyCode: true,
