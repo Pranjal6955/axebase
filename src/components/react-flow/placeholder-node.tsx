@@ -9,9 +9,14 @@ import { BaseNode } from "@/components/react-flow/base-node";
 export type PlaceholderNodeProps = Partial<NodeProps> & {
   children?: ReactNode;
   onClick?: () => void;
+  ariaLabel?: string;
 };
 
-export function PlaceholderNode({ children, onClick }: PlaceholderNodeProps) {
+export function PlaceholderNode({
+  children,
+  onClick,
+  ariaLabel = "Add new node",
+}: PlaceholderNodeProps) {
   const handleKeyDown = (event: React.KeyboardEvent<HTMLDivElement>) => {
     // Activate on Enter or Space key
     if (onClick && (event.key === "Enter" || event.key === " ")) {
@@ -27,7 +32,7 @@ export function PlaceholderNode({ children, onClick }: PlaceholderNodeProps) {
       onClick={onClick}
       onKeyDown={handleKeyDown}
       role="button"
-      aria-label="Add new node"
+      aria-label={ariaLabel}
     >
       {children}
       <Handle
