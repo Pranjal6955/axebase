@@ -1,8 +1,8 @@
 "use client";
 
 import { Handle, type NodeProps, Position } from "@xyflow/react";
-import type React from "react";
-import type { ReactNode } from "react";
+// biome-ignore lint/style/useImportType: React is needed for React.KeyboardEvent type
+import React, { type ReactNode } from "react";
 
 import { BaseNode } from "@/components/react-flow/base-node";
 
@@ -21,6 +21,7 @@ export function PlaceholderNode({ children, onClick }: PlaceholderNodeProps) {
   };
 
   return (
+    // biome-ignore lint/a11y/useSemanticElements: BaseNode is a React Flow node that must be a div, not a button
     <BaseNode
       className="w-auto h-auto border-dashed border-gray-400 bg-card p-4 text-center text-gray-400 shadow-none cursor-pointer hover:border-gray-500 hover:bg-gray-50"
       onClick={onClick}
